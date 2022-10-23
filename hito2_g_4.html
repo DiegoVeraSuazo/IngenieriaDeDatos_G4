@@ -15590,10 +15590,8 @@ class="
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Preguntas-y-Problemas">Preguntas y Problemas<a class="anchor-link" href="#Preguntas-y-Problemas">&#182;</a></h1><p>Una de las principales problemáticas a resolver se trata de un problema de clasificación en donde se busca determinar la posibilidad de predecir la clase, categoría de la manzana, o como se encuentra dentro del dataset el atributo NOM_CAT_ENT la cual se encuentra con varios de sus datos como INDETEMINADOS, lo cual permitiría mejorar la calidad de los datos existentes dentro del dataset.</p>
-<p>También se cree que con estos atributos elegidos es posible predecir otras clases en las que se clasifican las manzanas, por ejemplo si es rural o urbano, esto podría acelerar el proceso de censado del país.</p>
-<p>Para abordar el problema de categorizar por rural o urbano se utilizará un procedimiento similar al presentado anteriormente, se intentará clasificar la columna NOM_AREA para esto se utilizará un árbol de decisión usando los mismos sets de entrenamiento y testeo del experimento anterior, luego se usarán estos datos para entrenar un KNN y se van a comparar ambos modelos.</p>
-<p>Otro problema que se quiere abordar es tratar de crear un índice que refleje la calidad de los materiales, esto lo hicimos en la etapa experimental y le llamamos INDICE_MAT.</p>
+<h1 id="Problemas">Problemas<a class="anchor-link" href="#Problemas">&#182;</a></h1><p>El primer problema se considera de clasificación, ya que consiste en predecir la clase NOM_CAT_ENT de una manzana la cual corresponde su categoría de entidad (ciudad, pueblo, aldea, caserío, etc.), este problema se eligió luego de hacer el análisis exploratorio y observar muchas filas tienen la columna NOM_CAT_ENT como indeterminada.</p>
+<p>El segundo también se identifica como clasificación, se va a predecir el tipo de AREA de una manzana, esta columna indica si la manzana se encuentra en una zona rural o urbana.</p>
 
 </div>
 </div>
@@ -15605,7 +15603,26 @@ class="
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Propuesta-Experimental">Propuesta Experimental<a class="anchor-link" href="#Propuesta-Experimental">&#182;</a></h1><p>En esta sección se implementará la primera pregunta planteada que busca predecir la categoría de la manzana. Para ello lo que se hará es entrenar el subconjunto de datos que posea una categoría definida, para luego predecir la categoría de las filas las cuales poseen valor indeterminado de aquel atributo, siendo esta dentro del dataset la columna cuyo nombre es NOM_CAT_ENT, siendo más que nada un indicador que clasifica si la manzana en la que nos encontramos es un caserío, aldea, parcela, etc.</p>
+<h1 id="Propuesta-metodologica-experimental">Propuesta metodologica experimental<a class="anchor-link" href="#Propuesta-metodologica-experimental">&#182;</a></h1><h2 id="Metodo-de-buscar-clasificador">Metodo de buscar clasificador<a class="anchor-link" href="#Metodo-de-buscar-clasificador">&#182;</a></h2><p>Se abordarán los dos problemas propuestos de manera similar, en el caso del problema de clasificación de la columna NOM_CAT_ENT se propone seleccionar diferentes combinaciones de columnas con atributos que se consideró que tenían una relación con esta columna, estos atributos se dividen en conjuntos de columnas: origen del agua, materiales, tipos de vivienda. Se utilizarán datasets con todas estas columnas para hacer un modelo de predicción.</p>
+<p>Para hacer el modelo de predicción se entrenará un árbol de decisión, se elige este tipo de predictor debido a que se infiere que una categoría de área para una manzana se podría decidir en base a decisiones binarias (por ejemplo si el número de edificios es alto, es mas probable que sea una ciudad e improbable que sea un pueblo). Se entrenará el modelo con 4 datasets, el primero incluirá todos los conjuntos de columnas que se consideraron anteriormente, luego se entrenará con los 3 conjuntos de columnas sin incluir los demás, esto se realizará para comprobar qué conjuntos de columnas son más adecuados para predecir NOM_CAT_ENT.</p>
+<p>Para entrenar estos 4 árboles de decisión, cada vez se separará el dataset que se utilizará en un conjunto de entrenamiento y uno de prueba, que se dividirán en la proporción 70/30 respectivamente ya que estos son porcentajes balanceados.</p>
+<p>Para medir cuál predictor resulta mejor se observará la métrica de precisión, ya que lo que se busca es el acierto de los verdaderos positivos.</p>
+<p>A continuación se observará cada predictor generado, si alguno de predictores entrenados un conjunto de columnas individualmente obtuvo mejor resultado que el predictor que se entrenó con todas las columnas, se realizará un paso adicional. Se volverá a entrenar un árbol de decisión de la misma manera anterior, pero el dataset de entrenamiento consistirá en el conjunto de columnas que obtuvo una precisión más alta unido con el conjunto que obtuvo la segunda precisión más alta. Esto se realizará en caso de que exista alguna sinergia en estos conjuntos de columnas que permitiera predecir más efectivamente NOM_CAT_ENT.</p>
+<p>Luego de realizar este método se podrá obtener el mejor predictor basándose en su precisión.</p>
+<h3 id="Iteraciones-y-otros-modelos-de-prediccion">Iteraciones y otros modelos de prediccion<a class="anchor-link" href="#Iteraciones-y-otros-modelos-de-prediccion">&#182;</a></h3><p>Para comprobar se puede obtener un modelo mejor usando otros predictores, se realizará el mismo método de buscar clasificador pero reemplazando todos los usos de árbol de decisión por KNN, se estima que el árbol de decisión producirá mejores predictores, por lo que se busca comprobar esta hipótesis.</p>
+<p>Para abordar el segundo problema se realizará el mismo método de buscar clasificador experto, que en vez de entrenar los modelos para predecir NOM_CAT_ENT se entrenan para predecir la columna AREA.</p>
+
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h1 id="Implementaci%C3%B3n-de-propuesta-experimental">Implementaci&#243;n de propuesta experimental<a class="anchor-link" href="#Implementaci%C3%B3n-de-propuesta-experimental">&#182;</a></h1><p>En esta sección se implementará la primera pregunta planteada que busca predecir la categoría de la manzana. Para ello lo que se hará es entrenar el subconjunto de datos que posea una categoría definida, para luego predecir la categoría de las filas las cuales poseen valor indeterminado de aquel atributo, siendo esta dentro del dataset la columna cuyo nombre es NOM_CAT_ENT, siendo más que nada un indicador que clasifica si la manzana en la que nos encontramos es un caserío, aldea, parcela, etc.</p>
 
 </div>
 </div>
