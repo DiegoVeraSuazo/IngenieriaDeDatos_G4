@@ -15603,14 +15603,44 @@ class="
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Propuesta-metodologica-experimental">Propuesta metodologica experimental<a class="anchor-link" href="#Propuesta-metodologica-experimental">&#182;</a></h1><h2 id="Metodo-de-buscar-clasificador">Metodo de buscar clasificador<a class="anchor-link" href="#Metodo-de-buscar-clasificador">&#182;</a></h2><p>Se abordarán los dos problemas propuestos de manera similar, en el caso del problema de clasificación de la columna NOM_CAT_ENT se propone seleccionar diferentes combinaciones de columnas con atributos que se consideró que tenían una relación con esta columna, estos atributos se dividen en conjuntos de columnas: origen del agua, materiales, tipos de vivienda. Se utilizarán datasets con todas estas columnas para hacer un modelo de predicción.</p>
-<p>Para hacer el modelo de predicción se entrenará un árbol de decisión, se elige este tipo de predictor debido a que se infiere que una categoría de área para una manzana se podría decidir en base a decisiones binarias (por ejemplo si el número de edificios es alto, es mas probable que sea una ciudad e improbable que sea un pueblo). Se entrenará el modelo con 4 datasets, el primero incluirá todos los conjuntos de columnas que se consideraron anteriormente, luego se entrenará con los 3 conjuntos de columnas sin incluir los demás, esto se realizará para comprobar qué conjuntos de columnas son más adecuados para predecir NOM_CAT_ENT.</p>
-<p>Para entrenar estos 4 árboles de decisión, cada vez se separará el dataset que se utilizará en un conjunto de entrenamiento y uno de prueba, que se dividirán en la proporción 70/30 respectivamente ya que estos son porcentajes balanceados.</p>
-<p>Para medir cuál predictor resulta mejor se observará la métrica de precisión, ya que lo que se busca es el acierto de los verdaderos positivos.</p>
-<p>A continuación se observará cada predictor generado, si alguno de predictores entrenados un conjunto de columnas individualmente obtuvo mejor resultado que el predictor que se entrenó con todas las columnas, se realizará un paso adicional. Se volverá a entrenar un árbol de decisión de la misma manera anterior, pero el dataset de entrenamiento consistirá en el conjunto de columnas que obtuvo una precisión más alta unido con el conjunto que obtuvo la segunda precisión más alta. Esto se realizará en caso de que exista alguna sinergia en estos conjuntos de columnas que permitiera predecir más efectivamente NOM_CAT_ENT.</p>
-<p>Luego de realizar este método se podrá obtener el mejor predictor basándose en su precisión.</p>
-<h3 id="Iteraciones-y-otros-modelos-de-prediccion">Iteraciones y otros modelos de prediccion<a class="anchor-link" href="#Iteraciones-y-otros-modelos-de-prediccion">&#182;</a></h3><p>Para comprobar se puede obtener un modelo mejor usando otros predictores, se realizará el mismo método de buscar clasificador pero reemplazando todos los usos de árbol de decisión por KNN, se estima que el árbol de decisión producirá mejores predictores, por lo que se busca comprobar esta hipótesis.</p>
-<p>Para abordar el segundo problema se realizará el mismo método de buscar clasificador experto, que en vez de entrenar los modelos para predecir NOM_CAT_ENT se entrenan para predecir la columna AREA.</p>
+<h1 id="Propuesta-metodologica-experimental">Propuesta metodologica experimental<a class="anchor-link" href="#Propuesta-metodologica-experimental">&#182;</a></h1><h2 id="Metodo-de-buscar-clasificador">Metodo de buscar clasificador<a class="anchor-link" href="#Metodo-de-buscar-clasificador">&#182;</a></h2><p>Se abordaran los dos problemas propuestos de manera similar, en el caso del problema de clasificacion de la columna NOM_CAT_ENT se creara un modelo de prediccion. Para hacer el modelo de prediccion se entrenara un arbol de decicion, se elije este tipo de predictor debido a que se infiere que una categoria de area para una manzana se podria decidir en base a deciciones binarias (por ejemplo si el numero de edificios es alto, es mas probable que sea una ciudad e improbable que sea un pueblo).</p>
+<p>El arbol se entrenara con distintos dataset y luego se compararn los resultados.
+Estos dataset estan compuestos por los atributos se consideraron relevantes en la etapa exploratoria, estos datasets y sus atributos son los siguientes:</p>
+<p>1.- DATASET_AGUA:</p>
+<ul>
+<li>ORIGEN_AGUA_RED_PUBLICA</li>
+<li>ORIGEN_AGUA_POZO</li>
+<li>ORIGEN_AGUA_CAMION_ALJIBE</li>
+<li>ORIGEN_AGUA_RIO_VERTIENTE_ESTERO_CANAL_LAGO </li>
+</ul>
+<p>2.- DATASET_VIVIENDAS:</p>
+<ul>
+<li>TIPO_VIV_CASA</li>
+<li>TIPO_VIV_DPTO</li>
+<li>TIPO_VIV_TRADICIONAL</li>
+<li>TIPO_VIV_CONVENTILLO</li>
+<li>TIPO_VIV_MEDIAGUA</li>
+<li>TIPO_VIV_MOVIL</li>
+<li>TIPO_VIV_OTRO</li>
+</ul>
+<p>3.- DATASET_MATERIALES:</p>
+<ul>
+<li>MAT_ACEPTABLE</li>
+<li>MAT_RECUPERABLE</li>
+<li>MATIRREC</li>
+<li>Indice_mat</li>
+</ul>
+<p>4.- DATASET_COMBINADO:</p>
+<ul>
+<li>Contiene todas las columnas anteriores</li>
+</ul>
+<p>Se entrenara el modelo con estos 4 datasets, esto se realizara para comprobar que conjuntos de columnas son los mas adecuados para predecir NOM_CAT_ENT.</p>
+<p>Para entrenar los arboles de decicion, cada vez se separara el dataset que se utilizara en un conjunto de entrenamiento y uno de prueba, que se dividiran en la proporcion 70/30 respectivamente ya que estos son procentajes generalmente buenos segun lo visto en clases y no se considera que haya algun motivo en el contexto para usar otra proporcion.</p>
+<p>Para medir cual modelo resulta mejor se observara la metrica de precision ya que lo que nos interesa maximizar el numero de aciertos.</p>
+<p>Luego de entrenar los modelos se observara si alguno de los modelos entrenados con los dataset 1, 2 o 3 tienen mejor precision que el modelo entrenado con el dataset 4. Si es asi se realizara un entrenamiento adicional, se entrenara un arbol de decision de la misma manera pero se utilizara un dataset que combiene el dataset que obtuvo mejor precision con el dataset (distinto del 4) que haya obtenido la segunda mejor precision. Esto se realizara en caso de que exista alguna sinergia en estos conjuntos de columnas que permitiera predecir mas efectivamente NOM_CAT_ENT.</p>
+<p>Luego de realizar este metodo podremos obtener el mejor modelo basandonos en su precicion.</p>
+<h3 id="Iteraciones-y-otros-modelos-de-prediccion">Iteraciones y otros modelos de prediccion<a class="anchor-link" href="#Iteraciones-y-otros-modelos-de-prediccion">&#182;</a></h3><p>Para comprobar si se puede obtener un modelo mejor usando otros metodos se realizara el mismo metodo de buscar clasificador pero remplazando todos los usos de arbol de desicion por KNN, se presume que arbol de decicion producira mejores predictores pero se quiere comprobar esta hipotesis.</p>
+<p>Para abordar el segundo problema se realizara el mismo metodo de buscar clasificador excepto que en vez de entrenar los modelos para predecir NOM_CAT_ENT se entrenaran para predecir la columna AREA</p>
 
 </div>
 </div>
