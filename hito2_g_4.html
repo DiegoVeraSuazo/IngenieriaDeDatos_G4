@@ -15591,8 +15591,9 @@ class="
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h1 id="Preguntas-y-Problemas">Preguntas y Problemas<a class="anchor-link" href="#Preguntas-y-Problemas">&#182;</a></h1><p>Una de las principales problemáticas a resolver se trata de un problema de clasificación en donde se busca determinar la posibilidad de predecir la clase, categoría de la manzana, o como se encuentra dentro del dataset el atributo NOM_CAT_ENT la cual se encuentra con varios de sus datos como INDETEMINADOS, lo cual permitiría mejorar la calidad de los datos existentes dentro del dataset.</p>
+<p>También se cree que con estos atributos elegidos es posible predecir otras clases en las que se clasifican las manzanas, por ejemplo si es rural o urbano, esto podría acelerar el proceso de censado del país.</p>
+<p>Para abordar el problema de categorizar por rural o urbano se utilizará un procedimiento similar al presentado anteriormente, se intentará clasificar la columna NOM_AREA para esto se utilizará un árbol de decisión usando los mismos sets de entrenamiento y testeo del experimento anterior, luego se usarán estos datos para entrenar un KNN y se van a comparar ambos modelos.</p>
 <p>Otro problema que se quiere abordar es tratar de crear un índice que refleje la calidad de los materiales, esto lo hicimos en la etapa experimental y le llamamos INDICE_MAT.</p>
-<p>Por último se cree que con estos atributos elegidos es posible predecir otras clases en las que se clasifican las manzanas, por ejemplo si es rural o urbano, esto podría acelerar el proceso de censado del país.</p>
 
 </div>
 </div>
@@ -15740,42 +15741,25 @@ class="
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Accuracy en test set: 0.4895095178546617
+<pre>Accuracy en test set: 0.4925663470890649
                          precision    recall  f1-score   support
 
-                  Aldea       0.62      0.61      0.61       218
-    Asentamiento Minero       0.33      0.31      0.32        75
-  Asentamiento Pesquero       0.35      0.41      0.38        75
+                  Aldea       0.64      0.59      0.62       218
+    Asentamiento Minero       0.34      0.31      0.32        75
+  Asentamiento Pesquero       0.37      0.41      0.39        75
              Campamento       0.00      0.00      0.00        16
                 Caserío       0.39      0.40      0.39      1101
-     Comunidad Indígena       0.37      0.37      0.37       647
-Fundo-Estancia-Hacienda       0.40      0.55      0.46      1029
+     Comunidad Indígena       0.37      0.40      0.39       647
+Fundo-Estancia-Hacienda       0.40      0.56      0.47      1029
                   Otros       0.12      0.03      0.05        91
-      Parcela de Agrado       0.50      0.56      0.53       490
+      Parcela de Agrado       0.52      0.55      0.53       490
         Parcela-Hijuela       0.60      0.54      0.57      3307
- Veranada-Majada-Aguada       0.38      0.30      0.34       148
+ Veranada-Majada-Aguada       0.39      0.30      0.34       148
 
                accuracy                           0.49      7197
-              macro avg       0.37      0.37      0.37      7197
+              macro avg       0.38      0.37      0.37      7197
            weighted avg       0.50      0.49      0.49      7197
 
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>C:\Users\Diego\AppData\Local\Programs\Python\Python310\lib\site-packages\sklearn\metrics\_classification.py:1334: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-C:\Users\Diego\AppData\Local\Programs\Python\Python310\lib\site-packages\sklearn\metrics\_classification.py:1334: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-C:\Users\Diego\AppData\Local\Programs\Python\Python310\lib\site-packages\sklearn\metrics\_classification.py:1334: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
 </pre>
 </div>
 </div>
